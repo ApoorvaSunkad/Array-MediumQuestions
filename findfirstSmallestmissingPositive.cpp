@@ -52,4 +52,69 @@ int firstMissingPositive(vector<int>& nums) {
             }
         }
         return mini;
+}
+
+
+//Using Hashmap
+//T.C = O(N)
+//S.C = O(N)
+
+int firstMissingPositive(vector<int>& nums) {
+    int n = nums.size();
+
+    unordered_map<int,int> mp;
+
+    for(int i = 0; i<n; i++){
+        mp[nums[i]]++;
     }
+
+    int mini = 1;
+    for(int i = 1; i<=n+1; i++){
+        if(mp.find(i)==mp.end()){
+            mini = i;
+            break;
+        }
+    }
+    return mini;
+}
+
+//Optimised solution
+//T.C = O(N)
+//S.C = O(1)
+
+class Solution {
+    void swapp(vector<int>&nums, int i, int j){
+        int temp = nums[i];
+        nums[i] = nums[j];
+        nums[j] = temp;
+    }
+public:
+    int firstMissingPositive(vector<int>& nums) {
+        int n = nums.size();
+
+        int i = 0;
+        while(i<n){
+            //is element at the correct place
+            if(nums[i]==i+1 || nums[i]<=0||nums[i] > n){
+                i++;
+            }
+            else if(nums[i]==nums[nums[i]-1]){
+                i++;
+            }
+            else{
+                swapp(nums,i,nums[i]-1);
+            }
+            
+        }
+
+        int index = 0;
+        while(index<n){
+            if(nums[index]!=index+1){
+                return index+1;
+            }
+            index++;
+        }
+        return n+1;
+    }
+
+};
